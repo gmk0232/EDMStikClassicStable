@@ -1,0 +1,110 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    xmlns:myApp="http://schemas.android.com/apk/com.superpowered.crossexample"
+    android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingBottom="@dimen/activity_vertical_margin" tools:context=".MainActivity"
+    android:background="#3a3a3a">
+
+
+    <com.logitech.gmckee.edmstikclassicstable.UIComponents.CircleImageView
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:id="@+id/button1"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:src="@drawable/jacku"
+        android:layout_row="0"
+        android:layout_column="1"
+
+        />
+
+    <com.logitech.gmckee.edmstikclassicstable.UIComponents.CircleImageView
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:id="@+id/button2"
+        android:src="@drawable/floyd"
+        android:layout_row="0"
+        android:layout_column="1"
+        android:layout_alignTop="@+id/button1"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
+
+    <com.logitech.gmckee.edmstikclassicstable.UIComponents.CircleImageView
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:id="@+id/button3"
+        android:src="@drawable/muse"
+        android:layout_row="0"
+        android:layout_column="1"
+        android:layout_alignTop="@+id/button4"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <com.logitech.gmckee.edmstikclassicstable.UIComponents.CircleImageView
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:id="@+id/button4"
+        android:src="@drawable/tubelord"
+        android:layout_row="0"
+        android:layout_column="1"
+        android:layout_centerVertical="true"
+        android:layout_alignLeft="@+id/button2"
+        android:layout_alignStart="@+id/button2" />
+
+    <com.logitech.gmckee.edmstikclassicstable.UIComponents.CircleImageView
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:id="@+id/button5"
+        android:src="@drawable/lights"
+        android:layout_row="0"
+        android:layout_column="1"
+        android:layout_alignTop="@+id/button6"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <com.logitech.gmckee.edmstikclassicstable.UIComponents.CircleImageView
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:id="@+id/button6"
+        android:src="@drawable/chem"
+        android:layout_row="0"
+        android:layout_column="1"
+        android:layout_alignParentBottom="true"
+        android:layout_alignLeft="@+id/button2"
+        android:layout_alignStart="@+id/button2" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="UE"
+        android:textSize="32dp"
+        android:id="@+id/textView3"
+        android:layout_below="@+id/button1"
+        android:layout_centerHorizontal="true"
+        android:textStyle="bold" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="EDM STIK"
+        android:textColor="#325efc"
+        android:textSize="32dp"
+        android:id="@+id/textView4"
+        android:layout_above="@+id/button5"
+        android:layout_centerHorizontal="true"
+        android:textStyle="bold" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/testButton"
+        android:layout_below="@+id/textView3"
+        android:layout_centerHorizontal="true"
+        android:text="TEST" />
+
+</RelativeLayout>
