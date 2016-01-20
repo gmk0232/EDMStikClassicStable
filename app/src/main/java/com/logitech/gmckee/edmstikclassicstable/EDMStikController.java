@@ -5,7 +5,7 @@ import android.util.Log;
 import java.io.IOException;
 
 /**
- * Created by GMckee on 08/01/16.
+ * Updated by GMckee on 20/01/16.
  */
 public class EDMStikController implements Tiltable{
 
@@ -64,7 +64,8 @@ public class EDMStikController implements Tiltable{
                 fd5.getStartOffset(),
                 fd5.getLength(),
                 Integer.parseInt(samplerateString),
-                Integer.parseInt(bufferSizeString)
+                Integer.parseInt(bufferSizeString),
+                125
         };
 
         try {
@@ -109,7 +110,8 @@ public class EDMStikController implements Tiltable{
                     fd5.getStartOffset(),
                     fd5.getLength(),
                     Integer.parseInt(samplerateString),
-                    Integer.parseInt(bufferSizeString)
+                    Integer.parseInt(bufferSizeString),
+                    125
             };
 
             try {
@@ -151,7 +153,8 @@ public class EDMStikController implements Tiltable{
                     fd5.getStartOffset(),
                     fd5.getLength(),
                     Integer.parseInt(samplerateString),
-                    Integer.parseInt(bufferSizeString)
+                    Integer.parseInt(bufferSizeString),
+                    140
             };
 
             try {
@@ -193,7 +196,8 @@ public class EDMStikController implements Tiltable{
                     fd5.getStartOffset(),
                     fd5.getLength(),
                     Integer.parseInt(samplerateString),
-                    Integer.parseInt(bufferSizeString)
+                    Integer.parseInt(bufferSizeString),
+                    130
             };
 
             try {
@@ -235,7 +239,8 @@ public class EDMStikController implements Tiltable{
                     fd5.getStartOffset(),
                     fd5.getLength(),
                     Integer.parseInt(samplerateString),
-                    Integer.parseInt(bufferSizeString)
+                    Integer.parseInt(bufferSizeString),
+                    130
             };
 
             try {
@@ -275,7 +280,8 @@ public class EDMStikController implements Tiltable{
                     fd5.getStartOffset(),
                     fd5.getLength(),
                     Integer.parseInt(samplerateString),
-                    Integer.parseInt(bufferSizeString)
+                    Integer.parseInt(bufferSizeString),
+                    125
             };
 
             try {
@@ -288,20 +294,18 @@ public class EDMStikController implements Tiltable{
             } catch (IOException e) {
                 //Log.e("IOException", e.getMessage());
             }
-
-
             spnc.changeRunningTracks(params);
             spnc.onPlayPause(true);
         }
 
         if(trackNo==5) {
             //Mambo No. 6
-            fd0 = ctx.getResources().openRawResourceFd(R.raw.click);
-            fd1 = ctx.getResources().openRawResourceFd(R.raw.click);
-            fd2 = ctx.getResources().openRawResourceFd(R.raw.click);
-            fd3 = ctx.getResources().openRawResourceFd(R.raw.click);
-            fd4 = ctx.getResources().openRawResourceFd(R.raw.click);
-            fd5 = ctx.getResources().openRawResourceFd(R.raw.click);
+            fd0 = ctx.getResources().openRawResourceFd(R.raw.sspnomambo);
+            fd1 = ctx.getResources().openRawResourceFd(R.raw.ssmixmambo);
+            fd2 = ctx.getResources().openRawResourceFd(R.raw.ssbrassmambo);
+            fd3 = ctx.getResources().openRawResourceFd(R.raw.sssaxmambo);
+            fd4 = ctx.getResources().openRawResourceFd(R.raw.sspercmambo);
+            fd5 = ctx.getResources().openRawResourceFd(R.raw.percdrop);
 
             long[] params = {
                     fd0.getStartOffset(),
@@ -317,7 +321,8 @@ public class EDMStikController implements Tiltable{
                     fd5.getStartOffset(),
                     fd5.getLength(),
                     Integer.parseInt(samplerateString),
-                    Integer.parseInt(bufferSizeString)
+                    Integer.parseInt(bufferSizeString),
+                    120
             };
 
             try {
@@ -333,8 +338,6 @@ public class EDMStikController implements Tiltable{
             }
 
             spnc.changeRunningTracks(params);
-            PerformanceMenu mpm = (PerformanceMenu)ctx;
-            mpm.testButton.setBackgroundColor(0xFFFF0000);
             spnc.onPlayPause(true);
         }
     }
@@ -384,7 +387,6 @@ public class EDMStikController implements Tiltable{
 
         }
     }
-
 
     @Override
     public void onFront(float fwTilt) {
@@ -457,7 +459,7 @@ public class EDMStikController implements Tiltable{
     public void onTiltChange(float[] tiltValues) {
         if(!fXEnabled){
             if(!frontLocked) {
-                spnc.onFront(tiltValues[0]);
+                spnc.onFront(tiltValues[1]);
             }
             if(!leftLocked) {
                 spnc.onLeft(tiltValues[2]);
@@ -466,12 +468,12 @@ public class EDMStikController implements Tiltable{
                 spnc.onRight(tiltValues[3]);
             }
 
-            spnc.onBack(tiltValues[1]);
+            spnc.onBack(tiltValues[0]);
         }
 
         else{
-            fxValues[0]=(int)tiltValues[0];
-            fxValues[1]=(int)tiltValues[1];
+            fxValues[0]=(int)tiltValues[1];
+            fxValues[1]=(int)tiltValues[0];
             fxValues[2]=(int)tiltValues[2];
             fxValues[3]=(int)tiltValues[3];
 

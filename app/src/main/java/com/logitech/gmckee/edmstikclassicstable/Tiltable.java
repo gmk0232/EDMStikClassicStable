@@ -19,6 +19,7 @@ public interface Tiltable  {
 
     void onFX(float[] fxTilts);
 
+    /*This method is called once sanitized data has been sent from an accelerometer module */
     void onTiltChange(float... value);
 
 }

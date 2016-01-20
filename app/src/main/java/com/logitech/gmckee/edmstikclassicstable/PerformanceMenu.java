@@ -10,7 +10,6 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.Button;
 
 import com.logitech.gmckee.edmstikclassicstable.UIComponents.CircleImageView;
 
@@ -26,7 +25,6 @@ public class PerformanceMenu extends Activity{
     private CircleImageView Track4;
     private CircleImageView Track5;
     private CircleImageView Track6;
-    public Button testButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,21 +33,31 @@ public class PerformanceMenu extends Activity{
         setContentView(R.layout.activity_main);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
-
-
         // Get the device's sample rate and buffer size to enable low-latency Android audio output, if available.
-        String samplerateString = null, buffersizeString = null;
+        String samplerateString = null;
+        String buffersizeString = null;
+
         if (Build.VERSION.SDK_INT >= 17) {
-            AudioManager audioManager = (AudioManager) this.getSystemService(Context.AUDIO_SERVICE);
-            samplerateString = audioManager.getProperty(AudioManager.PROPERTY_OUTPUT_SAMPLE_RATE);
-            buffersizeString = audioManager.getProperty(AudioManager.PROPERTY_OUTPUT_FRAMES_PER_BUFFER);
+            try {
+                AudioManager audioManager = (AudioManager) this.getSystemService(Context.AUDIO_SERVICE);
+                samplerateString = audioManager.getProperty(AudioManager.PROPERTY_OUTPUT_SAMPLE_RATE);
+                buffersizeString = audioManager.getProperty(AudioManager.PROPERTY_OUTPUT_FRAMES_PER_BUFFER);
+            }
+
+            catch(Exception e){
+                Log.e("AudioManagerErr", e.getMessage());
+            }
         }
-        if (samplerateString == null) samplerateString = "44100";
-        if (buffersizeString == null) buffersizeString = "512";
+
+        if (samplerateString == null) {
+            samplerateString = "44100";
+        }
+
+        if (buffersizeString == null){
+            buffersizeString = "512";
+        }
 
         mEDMStikController = new EDMStikController(this, samplerateString, buffersizeString);
-
-         /* Set button listeners */
 
         Track1 = (CircleImageView) findViewById(R.id.button1);
         Track2 = (CircleImageView) findViewById(R.id.button2);
@@ -57,10 +65,6 @@ public class PerformanceMenu extends Activity{
         Track4 = (CircleImageView) findViewById(R.id.button4);
         Track5 = (CircleImageView) findViewById(R.id.button5);
         Track6 = (CircleImageView) findViewById(R.id.button6);
-        testButton = (Button) findViewById(R.id.testButton);
-
-
-
 
         Track1.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -140,7 +144,6 @@ public class PerformanceMenu extends Activity{
             }
         });
     }
-
 
     public boolean dispatchKeyEvent(KeyEvent event) {
 

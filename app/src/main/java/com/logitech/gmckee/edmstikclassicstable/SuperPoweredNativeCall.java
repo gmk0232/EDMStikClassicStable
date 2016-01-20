@@ -23,12 +23,10 @@ public class SuperPoweredNativeCall {
     }
 
     public void callSuperPoweredJNI(long[] params) {
-        //System.loadLibrary("SuperpoweredExample");
         SuperpoweredExample("/data/app/com.logitech.gmckee.edmstikclassicstable-1/base.apk", params);
     }
 
     public void changeRunningTracks(long[] params) {
-        //System.loadLibrary("SuperpoweredExample");
         changeTracks("/data/app/com.logitech.gmckee.edmstikclassicstable-1/base.apk", params);
     }
 

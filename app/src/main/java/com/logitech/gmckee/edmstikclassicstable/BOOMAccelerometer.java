@@ -5,6 +5,7 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.util.Log;
 
 /**
  * Created by GMckee on 08/01/16.
@@ -13,7 +14,13 @@ public class BOOMAccelerometer implements  SensorEventListener {
 
     private Context context;
     private SensorManager mSensorManager;
+    private float[] mValuesGravity = new float[3];
+    private float pitch,roll;
+    private int front, back,left,right;
+    private float flatZone = 0.2f;
     float[] tilt;
+    private boolean frontPast90=false;
+    private boolean backPast90=false;
 
     Tiltable tiltListener;
 
@@ -38,6 +45,14 @@ public class BOOMAccelerometer implements  SensorEventListener {
     public void onSensorChanged(SensorEvent event) {
         if ( tiltListener != null ) {
             System.arraycopy(event.values, 0, mValuesGravity, 0, 3);
+            Log.d("Sensors", "Pitch  = " + mValuesGravity[0] + " Roll =   " + mValuesGravity[1] + " Yaw = " + mValuesGravity[2]);
+
+            if(mValuesGravity[0]>0 && mValuesGravity[1]<0){
+                frontPast90=true;
+            }else{
+                frontPast90 = false;
+            }
+
             processTilt();
         }
     }
@@ -47,19 +62,23 @@ public class BOOMAccelerometer implements  SensorEventListener {
 
     }
 
-    private float[] mValuesGravity = new float[3];
-    private float pitch,roll;
-    private int front, back,left,right;
-    private float flatZone = 0.2f;
-
-    private void processTilt(){
+ private void processTilt(){
         computePitchRoll();
 
-        if(Math.abs(pitch)>1) pitch = 1.0f;
+        /* Compute Front+Back Axes */
+        if(Math.abs(pitch)>1) {
+            pitch = 1.0f;
+        }
+
         if(pitch>=flatZone)
         {
-            front = (int) Math.floor((pitch-flatZone)/(1-flatZone)*100);
-            back = 0;
+            if(frontPast90){
+            front=100;
+        } else {
+                front = (int) Math.floor((pitch - flatZone) / (1 - flatZone) * 100);
+                back = 0;
+            }
+
         }else if (pitch<=-flatZone)
         {
             front = 0;
@@ -70,7 +89,11 @@ public class BOOMAccelerometer implements  SensorEventListener {
             back = 0;
         }
 
-        if(Math.abs(roll)>1) roll = 1.0f;
+        /* Compute Left+Right Axes */
+        if(Math.abs(roll)>1) {
+            roll = 1.0f;
+        }
+
         if(roll>=flatZone)
         {
             right = (int) Math.floor((roll-flatZone)/(1-flatZone)*100);
@@ -85,6 +108,7 @@ public class BOOMAccelerometer implements  SensorEventListener {
             right = 0;
             left = 0;
         }
+
         tilt[0] = front;
         tilt[1] = back;
         tilt[2] = left;
@@ -92,22 +116,19 @@ public class BOOMAccelerometer implements  SensorEventListener {
 
         tiltListener.onTiltChange(tilt);
         computeStates(tilt);
-//            if(!bWasLongPress)onCrossfaderFront(tilt);
-//            onFxValue(tilt);
 
     }
 
     private void computeStates(float... val) {
         for( int i = 0; i <4 ; i++ ){
-            if ( val[i] > 10.0f )
-            {
-                switch(i){
+            if ( val[i] > 10.0f ) {
+                switch(i) {
 
                     case 0:
-                        tiltListener.onFront(val[i]);
+                        tiltListener.onBack(val[i]);
                         break;
                     case 1:
-                        tiltListener.onBack(val[i]);
+                        tiltListener.onFront(val[i]);
                         break;
                     case 2:
                         tiltListener.onLeft(val[i]);
@@ -127,8 +148,7 @@ public class BOOMAccelerometer implements  SensorEventListener {
         }
     }
 
-    private void computePitchRoll()
-    {
+    private void computePitchRoll() {
 
         pitch= mValuesGravity[0]/9.8f;
         roll= mValuesGravity[2]/9.8f;

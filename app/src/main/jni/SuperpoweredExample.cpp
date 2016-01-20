@@ -6,8 +6,6 @@
 #include <android/log.h>
 #include <csignal>
 
-double currentBPM = 125.0;
-
 static SuperpoweredExample* example = NULL;
 static void sigsegvHandler(int signum){
     __android_log_write(ANDROID_LOG_INFO, "signalHandler", "Caught SIGSEGV!");
@@ -97,7 +95,8 @@ SuperpoweredExample::SuperpoweredExample(const char *path, int *params) :
 
     stereoBuffer = (float *)memalign(32, (buffersize + 16) * sizeof(float) * 2);
 
-    currentBPM = 125.0f;
+    currentBPM = params[14];
+    trackBPM = params[14];
 
     playerFront = new SuperpoweredAdvancedAudioPlayer(&playerFront , playerEventCallbackFront, samplerate, 0);
     playerBack = new SuperpoweredAdvancedAudioPlayer(&playerBack , playerEventCallbackBack, samplerate, 0);
@@ -166,7 +165,11 @@ void SuperpoweredExample::changeTracks(const char *path, int *params) {
     playerCentre->open(path, params[8], params[9]);
     playerDrop->open(path, params[10], params[11]);
 
-    currentBPM = 125.0f;
+    currentBPM = params[14];
+    trackBPM = params[14];
+    flanger->bpm = currentBPM;
+    echo->bpm = currentBPM;
+    roll->bpm = currentBPM;
 
     playerFront->setBpm(currentBPM);
     playerBack->setBpm(currentBPM);
@@ -231,21 +234,13 @@ void SuperpoweredExample::onBack(float value) {
     if(value>5.0) {
         tempoMod = 1.0f - ((value/100)*0.25f);
         pthread_mutex_lock(&mutex);
-
-////    playerFront->setTempo(0.75f, true);
-////    playerBack->setTempo(0.75f, true);
-////    playerLeft->setTempo(0.75f, true);
-////    playerRight->setTempo(0.75f, true);
-////    playerCentre->setTempo(0.75f, true);
-//
-        currentBPM = 125.0*tempoMod;
+        example->currentBPM = example->trackBPM*tempoMod;
         pthread_mutex_unlock(&mutex);
     }
 
 }
 
 void SuperpoweredExample::onLeft(float value) {
-
 
     volLeft=(value/100);
 
@@ -409,9 +404,9 @@ JNIEXPORT void Java_com_logitech_gmckee_edmstikclassicstable_SuperPoweredNativeC
     delete example;
     // Convert the input jlong array to a regular int array.
     jlong *longParams = javaEnvironment->GetLongArrayElements(params, JNI_FALSE);
-    int arr[14];
+    int arr[15];
 
-    for (int n = 0; n < 14; n++) {
+    for (int n = 0; n < 15; n++) {
         arr[n] = longParams[n];
     }
 
@@ -424,9 +419,9 @@ JNIEXPORT void Java_com_logitech_gmckee_edmstikclassicstable_SuperPoweredNativeC
 JNIEXPORT void Java_com_logitech_gmckee_edmstikclassicstable_SuperPoweredNativeCall_changeTracks(JNIEnv *javaEnvironment, jobject self, jstring apkPath, jlongArray params) {
     // Convert the input jlong array to a regular int array.
     jlong *longParams = javaEnvironment->GetLongArrayElements(params, JNI_FALSE);
-    int arr[14];
+    int arr[15];
 
-    for (int n = 0; n < 14; n++) {
+    for (int n = 0; n < 15; n++) {
         arr[n] = longParams[n];
     }
 
